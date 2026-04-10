@@ -1,0 +1,33 @@
+project: t3-hearst
+repo: t3-hearst
+type: phased
+docs:
+  brief: docs/brief.md
+  discovery-log: docs/discovery-log.md
+  sessions: docs/sessions/
+  captures: docs/captures.md
+tracked_files:
+  - CLAUDE.md
+  - README.md
+  - docs/open-mind.yaml
+  - docs/brief.md
+  - docs/captures.md
+  - docs/discovery-log.md
+  - docs/sessions/*.md
+  - docs/plans/*.md
+tags:
+  - data-engineering
+  - microsoft-fabric
+  - power-bi
+  - medallion-architecture
+execution:
+  backend: task-tool
+  max_parallel: 6
+  quality_gate: full
+  review_escalation:
+    files_threshold: 8
+    lines_threshold: 500
+    security_patterns:
+      - "**/auth/**"
+      - "**/crypto/**"
+      - "**/permissions/**"

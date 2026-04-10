@@ -1,0 +1,24 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Claude Flow / ruflo runtime + scaffolding
+.claude/
+.claude-flow/
+.swarm/
+ruvector.db
+.mcp.json
+CLAUDE.md
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
