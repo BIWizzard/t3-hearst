@@ -16,6 +16,10 @@ tracked_files:
   - docs/sow/sow-v2-20260406.md
   - docs/sessions/*.md
   - docs/plans/*.md
+  - docs/fabric-toolkit/README.md
+  - docs/fabric-toolkit/MANIFEST.md
+  - docs/fabric-toolkit/PATTERN.md
+  - docs/fabric-toolkit/UPSTREAM.md
 tags:
   - data-engineering
   - microsoft-fabric
