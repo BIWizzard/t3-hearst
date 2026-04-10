@@ -52,3 +52,42 @@ Discoveries with cross-phase implications. Append-only.
 2. Must SOW closure (Dec 31 2026) complete before Decentrix sunset (Jan 1 2027), or can they run in parallel?
 3. Why did sponsorship shift from Ad Ops (Preman) to BI (Dilip) between MVP and Phase 2?
 4. Is "medallion architecture" the agreed internal pattern or just a working assumption? (Confirm at Design phase.)
+
+---
+
+## 2026-04-10 — Pre-Kickoff: Fabric Toolkit Setup
+**Phase context:** Pre-kickoff tooling prep — vendored `microsoft/skills-for-fabric` and wired an active set of Fabric agents and skills into Claude Code for the Phase 2 engagement.
+**Session log:** `sessions/2026-04-10-fabric-toolkit-setup.md`
+
+### Discoveries
+
+#### Microsoft ships a first-party, MIT-licensed Fabric skills library usable by Claude Code
+- `microsoft/skills-for-fabric` contains 3 persona agents (FabricDataEngineer, FabricAdmin, FabricAppDev), 10 skills covering Spark/Warehouse/Eventhouse/PowerBI authoring + consumption, 9 shared `common/` reference docs, and MCP setup templates. All Claude-Code compatible YAML frontmatter + markdown.
+- License is MIT (Microsoft Corporation, 2026). Attribution requirement met by shipping `UPSTREAM-LICENSE` alongside the vendored content.
+- **Downstream:** This is a durable, Microsoft-maintained knowledge base for Fabric work that we can pull from across the entire engagement. Any Fabric-adjacent task (medallion design, notebook authoring, TMDL semantic modeling, T-SQL ETL, governance) now has a first-party reference as context-dense as anything we'd write ourselves. All future Fabric work should consider whether one of the active skills applies before reinventing.
+
+#### Upstream skills deep-link into a shared `common/` directory via relative paths
+- Skills reference `../../common/COMMON-CORE.md` and similar paths. This is an upstream architectural choice (top-down flow: Agents → Skills → Common) documented in `docs/architecture-overview.md` inside the upstream repo.
+- **Downstream:** Any cherry-pick or per-skill reorganization that breaks this relative layout will silently degrade the skills' progressive disclosure. The fabric-toolkit vendoring pattern preserves the layout; any project-local override must either inherit the same layout or rewrite paths.
+
+#### Upstream `install.sh` is designed for global install and clobbers project-local `CLAUDE.md` / `AGENTS.md` / `.cursorrules` / `.windsurfrules`
+- Confirmed by reading `install.sh`. Copies skills to `~/.copilot/skills/fabric/` and drops compatibility files into the project root. Existing files may be overwritten depending on the install flag combination.
+- **Downstream:** **Never run `install.sh` against this repo** or any project repo that has its own `CLAUDE.md`. The toolkit's vendor-then-symlink pattern is the safe integration method. If we ever port this to a client repo that has its own CLAUDE.md conventions, same rule applies.
+
+#### Only 1 of 10 upstream skills requires an MCP server
+- `powerbi-consumption-cli` depends on the `PowerBIQuery` MCP at `api.fabric.microsoft.com/v1/mcp/powerbi` for DAX query execution. The other 9 skills use `az rest` / `sqlcmd` / `curl` / Livy API patterns and require no MCP.
+- **Downstream:** Delaying client MCP approval does not block any of our active skills. Only gates promotion of `powerbi-consumption-cli`. If the client permanently denies the Microsoft-hosted MCP endpoint, we lose DAX-via-MCP but keep all authoring capabilities.
+
+### Assumptions Validated
+
+- None against the brief's assumptions registry — this session was tooling work, not engagement claims.
+
+### Assumptions Invalidated
+
+- None.
+
+### Open Questions
+
+5. Does Microsoft update `microsoft/skills-for-fabric` frequently enough to warrant monthly sync cadence, or is quarterly enough? First real sync will set the baseline.
+6. At kickoff, confirm client approval of the Microsoft-hosted `PowerBIQuery` MCP server and establish the credential provisioning path. (New items 8 and 9 on the kickoff agenda alongside the prior 7.)
+7. If Fabric tooling patterns catch on internally at Trace3, is there value in publishing `PATTERN.md` + scripts as a reusable internal snippet so other engineers don't re-derive the approach?
