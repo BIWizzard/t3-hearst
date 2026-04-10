@@ -20,6 +20,7 @@ tracked_files:
   - docs/fabric-toolkit/MANIFEST.md
   - docs/fabric-toolkit/PATTERN.md
   - docs/fabric-toolkit/UPSTREAM.md
+  - docs/SKILL-LOCKER-PATTERN.md
 tags:
   - data-engineering
   - microsoft-fabric
