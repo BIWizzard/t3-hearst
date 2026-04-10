@@ -18,6 +18,16 @@ Full SOW references: [`docs/sow/sow-v2-20260406.md`](sow/sow-v2-20260406.md) (Ph
 
 ## Phase Tracker
 
+### Pre-Kickoff Workstreams
+
+Tooling and context preparation before the Apr 13–15 SOW kickoff. Not part of the formal SOW phase structure.
+
+| # | Workstream | Status | Date | Notes |
+|---|------------|--------|------|-------|
+| 1 | Project init + SOW ingestion | **Complete** | 2026-04-10 | Open Mind init, SOW v7 + v2 converted to markdown, README rewritten with SOW context, foundational facts embedded in Neon + Claude Flow. Session: `sessions/2026-04-10-project-init-sow-ingest.md` |
+| 2 | Fabric toolkit setup | **Complete** | 2026-04-10 | Vendored `microsoft/skills-for-fabric` via git subtree, added curation overlay (README/MANIFEST/PATTERN/UPSTREAM/LICENSE), wrote sync + wire scripts, symlinked 2 agents + 5 skills into `.claude/`. Session: `sessions/2026-04-10-fabric-toolkit-setup.md` |
+| 3 | Fabric toolkit verification + integration hardening | **Complete** | 2026-04-10 | Functional verification of wired toolkit confirmed structural pass; discovered subagent skill-visibility gap (skills are main-thread only); documented MANIFEST-first + SKILL.md-read invocation pattern across `CLAUDE.md`, `MANIFEST.md`, and fabric-toolkit `README.md`; validated pattern via comparison spawn — skill-loaded output dramatically exceeds blind baseline. Plan: `plans/2026-04-10-fabric-toolkit-integration-hardening.md` |
+
 ### SOW Structure (from SOW v2.0)
 
 | Phase | Status | Dates | Notes |

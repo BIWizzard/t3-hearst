@@ -1,5 +1,11 @@
 # fabric-toolkit — Asset Manifest
 
+> **For agents:** Use this file as your Fabric-work routing index.
+> 1. Scan the **Agents** and **Skills** tables below for `active` rows matching your task.
+> 2. Read the corresponding `SKILL.md` at `docs/fabric-toolkit/upstream/skills/<name>/SKILL.md`. Skills deep-link into `../../common/` reference docs; follow those links as needed.
+> 3. Skip `dormant` rows unless the row's "Promote when" trigger is met — those assets exist on disk but are not wired into Claude Code.
+> 4. Skip the **MCP**, **Upstream docs**, and **Compatibility files** sections entirely — they are not agent-invocable from this project.
+
 Full index of upstream `microsoft/skills-for-fabric` assets, marked **active** (wired into `.claude/`) or **dormant** (available at `upstream/` but not loaded by Claude Code).
 
 **Rule:** Only active assets count toward Claude Code's loaded context. Promoting a dormant asset takes a single symlink addition in `scripts/fabric-toolkit-wire.sh` plus a status flip here. See `README.md` for the full promotion flow.

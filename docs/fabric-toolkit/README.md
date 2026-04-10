@@ -46,6 +46,43 @@ scripts/fabric-toolkit-wire.sh
 
 This recreates the active-set symlinks. Idempotent — safe to rerun.
 
+## Invocation patterns
+
+### For humans browsing the toolkit
+
+Open `MANIFEST.md` first. It's the curated index of active vs dormant assets with one-line purpose descriptions and promote-when triggers. From there, open `upstream/skills/<name>/SKILL.md` for the skill you need.
+
+### For agents (including spawned subagents)
+
+**The critical wrinkle:** Claude Code skills are registered at the main session level. When you spawn a subagent via the Agent tool, the subagent gets an isolated context that does **not** inherit the parent session's skill roster. The fabric agents' `delegates_to:` frontmatter is advisory metadata, not a loader directive — it tells a reader which skills the agent expects to delegate to, but Claude Code does not walk that list and pre-register the skills into the subagent.
+
+This means **inside a spawned `FabricDataEngineer` or `FabricAdmin` subagent, the skill content is not auto-available**, even though the symlinks resolve correctly and the main-thread session sees the skills enumerated in its roster. This was discovered and verified in the 2026-04-10 fabric toolkit verification session — see `../../docs/discovery-log.md` for the root-cause trace.
+
+**Three workarounds** — pick per task:
+
+1. **Subagent reads `SKILL.md` directly** *(default — use this unless you have a reason not to)*. In the spawn prompt, tell the agent: *"Before you begin, Read `docs/fabric-toolkit/MANIFEST.md`, then Read the relevant `SKILL.md` file(s) for this task from `docs/fabric-toolkit/upstream/skills/<name>/SKILL.md`. Skills are NOT auto-loaded into subagents — these file reads are how you access them."* Cheapest, most repeatable, preserves subtree-sync purity (no upstream edits).
+2. **Inline the skill content in the spawn prompt.** Main thread reads the `SKILL.md`, extracts the relevant sections, injects them as context in the Agent call. Best when one skill maps cleanly to a single task and you want the agent to start work immediately without a round-trip.
+3. **Do the skill-heavy work on the main thread.** Invoke the skill via the `Skill` tool on the main thread (where it *is* registered), then delegate only the narrow judgement calls to the fabric subagent with pre-digested context. Best when the skill content is large and the subagent only needs targeted input.
+
+**Default to #1.** Use #2 when the spawn needs to start designing immediately with no file-read overhead. Use #3 when the task is mostly about decisions, not content generation.
+
+### Example spawn prompt (using the default pattern)
+
+```
+Use the FabricDataEngineer agent to design the Bronze → Silver merge
+pattern for WideOrbit `spots` with SCD Type 2, including quality gates
+and the quarantine routing for failed batches.
+
+Before you begin, Read docs/fabric-toolkit/MANIFEST.md to see what is
+available, then Read the relevant SKILL.md file(s) for this task from
+docs/fabric-toolkit/upstream/skills/<name>/SKILL.md. Skills are NOT
+auto-loaded into subagents — these file reads are how you access them.
+
+Context: [task context here — source system, grain, business rules]
+
+Deliverable: [what you want back, in what format]
+```
+
 ## Promoting a dormant asset
 
 To activate something currently marked dormant in `MANIFEST.md`:
