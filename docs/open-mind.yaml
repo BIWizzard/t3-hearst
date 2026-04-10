@@ -7,12 +7,13 @@ docs:
   sessions: docs/sessions/
   captures: docs/captures.md
 tracked_files:
-  - CLAUDE.md
   - README.md
   - docs/open-mind.yaml
   - docs/brief.md
   - docs/captures.md
   - docs/discovery-log.md
+  - docs/sow/sow-v7-20251118.md
+  - docs/sow/sow-v2-20260406.md
   - docs/sessions/*.md
   - docs/plans/*.md
 tags:
